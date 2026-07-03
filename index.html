@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A special interactive birthday journey through memories. Wishing a happy birthday with appreciation.">
+    <title>Happy Birthday Ritika | A Journey of Memories</title>
+    
+    <!-- Google Fonts: Elegant headings, Calligraphy cursives, and Modern sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Sacramento&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for elegant icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Core Style -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- 1. Page Loading Screen -->
+    <div id="loading-screen">
+        <div class="loading-content">
+            <h1 class="loading-title">Collecting memories</h1>
+            <div class="loading-dots">
+                <span>.</span><span>.</span><span>.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden Constellation Canvas (Easter Egg overlay) -->
+    <canvas id="constellation-canvas"></canvas>
+    <div id="constellation-ui" class="glass-card hidden">
+        <button id="close-constellation-btn" class="close-btn">&times;</button>
+        <div class="constellation-message">
+            <i class="fas fa-star-and-crescent star-icon-glow"></i>
+            <h3>The Constellation of Memories</h3>
+            <p>"Some memories never really disappear. They simply become stars we smile at from afar."</p>
+        </div>
+    </div>
+
+    <!-- Canvas for Floating particles (Sakura, Stars, Gold Dust depending on section) -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Floating Audio Control Panel -->
+    <div id="audio-panel" class="glass-card hidden">
+        <button id="music-toggle" aria-label="Toggle Music"><i class="fas fa-music"></i></button>
+        <div class="audio-slider-container">
+            <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.5" aria-label="Volume Slider">
+        </div>
+        <span id="audio-status">Playing</span>
+    </div>
+
+    <!-- Main Header -->
+    <header class="main-header">
+        <div id="logo" class="logo">For Ritika</div>
+        <span id="stars-found-counter" class="hidden">✨ Stars found: <span id="star-count">0</span>/7</span>
+    </header>
+
+    <!-- 2. Intro Screen -->
+    <section id="intro-screen" class="hidden">
+        <div class="intro-content">
+            <h1 class="fade-in-text">A journey through memories...</h1>
+            <p class="fade-in-text sub">Turn on your sound, get comfortable, and begin.</p>
+            <button id="start-btn" class="gold-btn magnetic">Open Surprise <i class="fas fa-feather"></i></button>
+        </div>
+    </section>
+
+    <!-- 3. Envelope & Letter Overlay -->
+    <section id="envelope-screen" class="hidden">
+        <div class="envelope-flow-container">
+            <div class="envelope-instruction">A small letter for someone special.</div>
+            
+            <div class="envelope-container">
+                <div id="envelope" class="envelope">
+                    <!-- Envelope Back Side -->
+                    <div class="envelope-back">
+                        <div class="flap"></div>
+                    </div>
+                    
+                    <!-- Envelope Front Side -->
+                    <div class="envelope-front">
+                        <div class="stamp"></div>
+                        
+                        <!-- Crackable Wax Seal -->
+                        <div id="wax-seal" class="wax-seal">
+                            <div class="seal-left"><i class="fas fa-heart"></i></div>
+                            <div class="seal-right"><i class="fas fa-heart"></i></div>
+                        </div>
+                        
+                        <div class="address-label">
+                            <span class="to-label">To: Reet</span>
+                            <span class="tap-hint">Tap wax seal to crack</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Aged Handwriting Letter Paper -->
+                    <div id="letter" class="letter">
+                        <div class="letter-paper aged-paper">
+                            <!-- Paper fold lines and singed edges details in CSS -->
+                            <div class="paper-texture"></div>
+                            <div class="paper-fold fold-horizontal"></div>
+                            <div class="paper-fold fold-vertical"></div>
+                            
+                            <div class="letter-header">
+                                <span class="date">July 4th</span>
+                            </div>
+                            <div class="letter-body">
+                                <p id="typewriter-text"></p>
+                            </div>
+                            <div class="letter-footer">
+                                <button id="continue-journey-btn" class="glass-btn hidden">Continue the Journey <i class="fas fa-arrow-down"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Scrollable Story Container -->
+    <main id="main-content" class="hidden-scroll">
+        
+        <!-- Hidden Star 1 (Easter Egg) -->
+        <span class="hidden-star star-pos-1" data-id="1">★</span>
+
+        <!-- 4. Timeline Section (Horizontal track) -->
+        <section id="journey" class="journey-section">
+            <div class="sticky-container">
+                <div class="section-title-container">
+                    <h2 class="section-title">The Shared Journey</h2>
+                    <p class="section-subtitle">Moments that shaped our story.</p>
+                </div>
+                
+                <div class="horizontal-track-container">
+                    <div class="timeline-line"></div>
+                    
+                    <div class="horizontal-track">
+                        <!-- Milestone 1 -->
+                        <div class="timeline-node glass-card">
+                            <div class="milestone-icon"><i class="fas fa-book"></i></div>
+                            <span class="milestone-year">Class 7</span>
+                            <h3 class="milestone-title">First Met</h3>
+                            <p class="milestone-desc">Two classmates who had no idea how important they'd become to each other.</p>
+                        </div>
+                        
+                        <!-- Milestone 2 -->
+                        <div class="timeline-node glass-card">
+                            <div class="milestone-icon"><i class="fas fa-heart"></i></div>
+                            <span class="milestone-year">Class 8</span>
+                            <h3 class="milestone-title">A New Spark</h3>
+                            <p class="milestone-desc">A story quietly began.</p>
+                        </div>
+                        
+                        <!-- Milestone 3 -->
+                        <div class="timeline-node glass-card">
+                            <div class="milestone-icon"><i class="fas fa-school"></i></div>
+                            <span class="milestone-year">School Days</span>
+                            <h3 class="milestone-title">Growing Together</h3>
+                            <p class="milestone-desc">Homework, classrooms, exams, laughter, and countless little memories.</p>
+                        </div>
+                        
+                        <!-- Milestone 4 -->
+                        <div class="timeline-node glass-card">
+                            <div class="milestone-icon"><i class="fas fa-compass"></i></div>
+                            <span class="milestone-year">Memories</span>
+                            <h3 class="milestone-title">Moments Shared</h3>
+                            <p class="milestone-desc">We laughed. We learned. We grew. And every memory became part of our story.</p>
+                        </div>
+                        
+                        <!-- Milestone 5 -->
+                        <div class="timeline-node glass-card">
+                            <div class="milestone-icon"><i class="fas fa-cake-candles"></i></div>
+                            <span class="milestone-year">Today</span>
+                            <h3 class="milestone-title">A Wish</h3>
+                            <p class="milestone-desc">Just wishing you happiness. Happy Birthday.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="scroll-down-hint">
+                    <span>Swipe down to continue</span>
+                    <i class="fas fa-chevron-down bounce"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- Hidden Star 2 (Easter Egg) -->
+        <span class="hidden-star star-pos-2" data-id="2">★</span>
+
+        <!-- 5. Why Today Is Special Section -->
+        <section id="why-special" class="why-special-section">
+            <div class="container">
+                <div class="special-card glass-card">
+                    <div class="special-icon-container">
+                        <i class="fas fa-sun-plant-wilt"></i>
+                    </div>
+                    <h2>Why Today Is Special</h2>
+                    <p class="special-text">
+                        Every birthday is a reminder of another year of growth, dreams, laughter, and memories.
+                    </p>
+                    <p class="special-text highlighted">
+                        Today isn't about the past. It's simply about wishing you a beautiful future.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Hidden Star 3 (Easter Egg) -->
+        <span class="hidden-star star-pos-3" data-id="3">★</span>
+
+        <!-- 6. 3D Polaroid Carousel Gallery -->
+        <section id="memories" class="memories-section">
+            <div class="container">
+                <div class="section-title-container center">
+                    <h2 class="section-title">A Carousel of Moments</h2>
+                    <p class="section-subtitle">Tilted polaroids. Swipe or drag to rotate them.</p>
+                </div>
+                
+                <div class="carousel-viewport">
+                    <div class="carousel-container" id="polaroid-carousel">
+                        <!-- Polaroid 1 -->
+                        <div class="carousel-card polaroid-card">
+                            <div class="polaroid-img-wrapper">
+                                <img src="assets/images/1.jpg" alt="School Days" loading="lazy">
+                            </div>
+                        </div>
+                        
+                        <!-- Polaroid 2 -->
+                        <div class="carousel-card polaroid-card">
+                            <div class="polaroid-img-wrapper">
+                                <img src="assets/images/2.jpg" alt="After Exams" loading="lazy">
+                            </div>
+                        </div>
+                        
+                        <!-- Polaroid 3 -->
+                        <div class="carousel-card polaroid-card">
+                            <div class="polaroid-img-wrapper">
+                                <img src="assets/images/3.jpg" alt="Those Random Laughs" loading="lazy">
+                            </div>
+                        </div>
+                        
+                        <!-- Polaroid 4 -->
+                        <div class="carousel-card polaroid-card">
+                            <div class="polaroid-img-wrapper">
+                                <img src="assets/images/4.jpg" alt="Forever a Memory" loading="lazy">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="carousel-nav">
+                    <button id="prev-btn" class="nav-btn" aria-label="Previous Polaroid"><i class="fas fa-chevron-left"></i></button>
+                    <div class="carousel-dots" id="carousel-dots"></div>
+                    <button id="next-btn" class="nav-btn" aria-label="Next Polaroid"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Hidden Star 4 (Easter Egg) -->
+        <span class="hidden-star star-pos-4" data-id="4">★</span>
+
+        <!-- 7. Memory Jar Section -->
+        <section id="memory-jar-section" class="jar-section">
+            <div class="container">
+                <div class="section-title-container center">
+                    <h2 class="section-title">The Memory Jar</h2>
+                    <p class="section-subtitle">Click the glowing stars inside the jar to release a memory.</p>
+                </div>
+                
+                <div class="jar-layout">
+                    <!-- Glass Jar Graphic Container -->
+                    <div class="jar-container">
+                        <canvas id="jar-canvas"></canvas>
+                        
+                        <div class="glass-jar">
+                            <div class="jar-lid"></div>
+                            <div class="jar-neck"></div>
+                            <div class="jar-body-shape"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Floating Pop-up Memory Display -->
+                    <div class="memory-output-container">
+                        <div id="memory-speech-bubble" class="speech-bubble glass-card hidden">
+                            <i class="fas fa-quote-left quote-icon"></i>
+                            <p id="memory-text">Click a star to pull out a memory...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Hidden Star 5 (Easter Egg) -->
+        <span class="hidden-star star-pos-5" data-id="5">★</span>
+
+        <!-- 8. Birthday Surprise Section (Opening Cake) -->
+        <section id="surprise" class="surprise-section">
+            <canvas id="confetti-canvas"></canvas>
+            <canvas id="fireworks-canvas"></canvas>
+            
+            <div class="container">
+                <div class="section-title-container center">
+                    <h2 class="section-title">A Warm Celebration</h2>
+                    <p class="section-subtitle">Make a wish and blow the candle!</p>
+                </div>
+                
+                <div class="cake-container">
+                    <div class="cake" id="interactive-cake">
+                        <div class="plate"></div>
+                        
+                        <!-- Openable Drawer wrapper on Cake -->
+                        <div class="cake-base-body">
+                            <div class="layer layer-bottom"></div>
+                            <div class="layer layer-middle"></div>
+                            <div class="layer layer-top-split-left"></div>
+                            <div class="layer layer-top-split-right"></div>
+                        </div>
+                        
+                        <!-- Sliding Message Drawer -->
+                        <div id="cake-drawer" class="cake-drawer glass-card">
+                            <i class="fas fa-gift gift-icon"></i>
+                            <p>May this year bring you countless reasons to smile. ✨</p>
+                        </div>
+                        
+                        <div class="icing"></div>
+                        <div class="drips">
+                            <div class="drip drip-1"></div>
+                            <div class="drip drip-2"></div>
+                            <div class="drip drip-3"></div>
+                        </div>
+                        
+                        <!-- Candle -->
+                        <div class="candle">
+                            <div class="flame active"></div>
+                            <div class="smoke"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="action-container">
+                    <div class="cake-controls">
+                        <button id="blow-btn" class="gold-btn magnetic">Blow out Candle 🕯️</button>
+                        <button id="mic-toggle-btn" class="glass-btn mic-btn" aria-label="Use Microphone"><i class="fas fa-microphone"></i> Use Mic</button>
+                    </div>
+                    <p id="mic-hint" class="small-hint">Or click the microphone icon and blow into your mic!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Hidden Star 6 (Easter Egg) -->
+        <span class="hidden-star star-pos-6" data-id="6">★</span>
+
+        <!-- 9. Wish Animation Section -->
+        <section id="wish" class="wish-section">
+            <div class="aurora-bg">
+                <div class="aurora-glow aurora-1"></div>
+                <div class="aurora-glow aurora-2"></div>
+                <div class="aurora-glow aurora-3"></div>
+            </div>
+            
+            <div class="wish-container">
+                <div class="glowing-wish">
+                    <span class="wish-title">Happy Birthday</span>
+                    <h1 class="wish-name">Ritika</h1>
+                    <span class="wish-subtitle">Wishing you endless growth, peace, and beautiful dreams.</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Hidden Star 7 (Easter Egg) -->
+        <span class="hidden-star star-pos-7" data-id="7">★</span>
+
+        <!-- 10. Starry Sky & Final Surprise Section -->
+        <section id="stars-section" class="stars-section">
+            <canvas id="stars-canvas"></canvas>
+            
+            <div class="container">
+                <div class="final-letter glass-card">
+                    <div class="letter-paper">
+                        <p class="final-paragraph font-handwriting large">
+                            Happy Birthday, Ritika.
+                        </p>
+                        <p class="final-paragraph">
+                            Thank you for being part of such an important chapter of my life.
+                        </p>
+                        <p class="final-paragraph">
+                            I genuinely hope this year brings you happiness, good health, new opportunities, and countless reasons to smile.
+                        </p>
+                        <p class="final-paragraph font-handwriting" style="font-size: 1.6rem; color: var(--rose-gold-light); margin-top: 10px;">
+                            Keep shining.<br>— Sujeet
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="ending-action-container">
+                    <button id="end-surprise-btn" class="gold-btn magnetic">End Surprise <i class="fas fa-moon"></i></button>
+                </div>
+                
+                <div class="qr-container glass-card">
+                    <p class="qr-title">Scan to Revisit Surprise</p>
+                    <img id="qr-image" src="" alt="Surprise QR Code">
+                </div>
+                
+                <footer class="final-footer">
+                    <p class="gratitude-text">Made with gratitude.</p>
+                </footer>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- CDNs: GSAP, ScrollTrigger, Lenis, and Confetti -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <!-- 11. Ending Screen Overlay -->
+    <div id="ending-screen" class="hidden">
+        <div class="ending-content">
+            <p class="ending-fade-text">Thank you for opening this little surprise.</p>
+        </div>
+    </div>
+
+    <!-- Core Application Logic -->
+    <script src="script.js"></script>
+</body>
+</html>
